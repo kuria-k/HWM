@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Kelvin's Prescriptions · For Helen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Libre Baskerville', serif;
+      background: linear-gradient(135deg, #FDF8F5 0%, #F9F0F5 50%, #F0EAF6 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-top: 80px;
+      padding-bottom: 2rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .floating-heart {
+      position: fixed;
+      pointer-events: none;
+      color: rgba(201, 160, 181, 0.15);
+      font-size: 20px;
+      user-select: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      animation: fadeIn 0.8s ease-out;
+      padding: 0 1rem;
+    }
+
+    .prescription-card {
+      background: white;
+      border-radius: 24px;
+      padding: clamp(2rem, 5vw, 3rem);
+      box-shadow: 0 20px 50px rgba(107, 78, 113, 0.12);
+      border: 1px solid rgba(201, 160, 181, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .rx-header {
+      border-bottom: 2px solid #f0e0e8;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .rx-symbol {
+      font-size: 3.2rem;
+      color: #c49aad;
+      font-weight: 700;
+      font-family: 'Libre Baskerville', serif;
+      letter-spacing: 2px;
+    }
+
+    .clinic-info {
+      text-align: right;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      color: #9b7e92;
+      line-height: 1.5;
+    }
+
+    .patient-info {
+      background: #fef8fa;
+      padding: 1rem 1.2rem;
+      border-radius: 16px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.85rem;
+      color: #7a5f71;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      border: 1px solid #f0e0e8;
+    }
+
+    .prescription-title {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      color: #5e3e52;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      line-height: 1.3;
+      font-family: 'Libre Baskerville', serif;
+    }
+
+    .prescription-content {
+      font-size: clamp(1rem, 2vw, 1.1rem);
+      color: #5d4a5e;
+      line-height: 1.9;
+      font-family: 'Lato', sans-serif;
+      margin-bottom: 2rem;
+      text-align: justify;
+    }
+
+    .diagnosis-box {
+      background: linear-gradient(135deg, #fbf5f8 0%, #f8f0f6 100%);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid #f0e0e8;
+    }
+
+    .label {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.7rem;
+      color: #b28aa0;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .value {
+      font-family: 'Lato', sans-serif;
+      font-size: 1rem;
+      color: #6b4e71;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    .value:last-child {
+      margin-bottom: 0;
+    }
+
+    .signature-area {
+      border-top: 2px solid #f0e0e8;
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      color: #9b7e92;
+    }
+
+    .signature-name {
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: #c49aad;
+      margin-top: 0.3rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+      gap: 1rem;
+    }
+
+    .btn-prev, .btn-next {
+      background: rgba(255, 255, 255, 0.92);
+      color: #7a5f71;
+      border: 1.5px solid rgba(196, 154, 173, 0.4);
+      border-radius: 60px;
+      padding: 0.8rem 1.8rem;
+      font-size: 0.9rem;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, #d4b5c4 0%, #c49aad 100%);
+      border: none;
+      color: white;
+      box-shadow: 0 4px 12px rgba(196, 154, 173, 0.3);
+    }
+
+    .btn-prev:hover {
+      background: white;
+      transform: translateX(-3px);
+      border-color: #c49aad;
+    }
+
+    .btn-next:hover {
+      transform: translateX(3px);
+      box-shadow: 0 6px 18px rgba(196, 154, 173, 0.4);
+    }
+
+    .btn-prev:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .final-message {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 24px;
+      padding: 2rem;
+      margin-top: 2rem;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(196, 154, 173, 0.15);
+      border: 1px solid rgba(196, 154, 173, 0.4);
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    .step-counter {
+      text-align: center;
+      margin-bottom: 1.2rem;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.75rem;
+      color: #b28aa0;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 550px) {
+      body {
+        padding-top: 70px;
+        padding-bottom: 1rem;
+      }
+      .container {
+        padding: 0 0.8rem;
+      }
+      .nav-buttons {
+        flex-direction: column;
+      }
+      .btn-prev, .btn-next {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="bg-white/95 backdrop-blur-sm fixed w-full z-20 top-0 start-0 border-b border-gray-200 shadow-sm">
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+      <svg class="h-8 w-8 text-[#c49aad]" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+      <span class="self-center text-xl font-semibold whitespace-nowrap text-[#5e3e52]">Kelvin's Heart</span>
+    </a>
+    <div class="flex items-center md:order-2 space-x-1 md:space-x-0 rtl:space-x-reverse">
+      <button id="languageDropdownBtn" type="button" class="flex items-center text-[#5e3e52] bg-transparent border border-[#c49aad]/30 hover:bg-[#f9f0f5] focus:ring-4 focus:ring-[#c49aad]/20 font-medium rounded-lg text-sm px-3 py-2 focus:outline-none transition-all">
+        <svg class="h-4 w-4 me-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15 15 0 0 0 0 20 15 15 0 0 0 0-20z"/>
+        </svg>
+        <span id="currentLanguageLabel">English</span>
+      </button>
+      <div class="z-50 hidden bg-white border border-gray-200 rounded-lg shadow-lg w-44" id="languageDropdownMenu">
+        <ul class="p-2 text-sm text-gray-700 font-medium" role="none">
+          <li><a href="#" data-lang="en" class="lang-option inline-flex items-center w-full p-2 hover:bg-[#f9f0f5] hover:text-[#c49aad] rounded">🇬🇧 English</a></li>
+          <li><a href="#" data-lang="sw" class="lang-option inline-flex items-center w-full p-2 hover:bg-[#f9f0f5] hover:text-[#c49aad] rounded">🇹🇿 Kiswahili</a></li>
+          <li><a href="#" data-lang="ki" class="lang-option inline-flex items-center w-full p-2 hover:bg-[#f9f0f5] hover:text-[#c49aad] rounded">🌾 Gĩkũyũ</a></li>
+          <li><a href="#" data-lang="fr" class="lang-option inline-flex items-center w-full p-2 hover:bg-[#f9f0f5] hover:text-[#c49aad] rounded">🇫🇷 Français</a></li>
+        </ul>
+      </div>
+      <button id="navbarToggle" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h14"/></svg>
+      </button>
+    </div>
+    <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbarMenu">
+      <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-transparent">
+        <!-- <a href="/home.html" class="nav-link block py-2 px-3 rounded md:p-0 text-gray-900 hover:text-[#c49aad] transition-colors" data-page="home">Home</a>
+        <a href="/index.html" class="nav-link block py-2 px-3 rounded md:p-0 text-[#c49aad] font-semibold transition-colors" data-page="prescriptions">Prescriptions</a>
+        <a href="/letters.html" class="nav-link block py-2 px-3 rounded md:p-0 text-gray-900 hover:text-[#c49aad] transition-colors" data-page="letters">Letters</a>
+        <a href="/quotes.html" class="nav-link block py-2 px-3 rounded md:p-0 text-gray-900 hover:text-[#c49aad] transition-colors" data-page="songs">Songs</a> -->
+        <a href="/home.html">Home</a>
+        <a href="/index.html">Prescriptions</a>
+        <a href="/letters.html">Letters</a>
+        <a href="/quotes.html">Songs</a>
+      </ul>
+    </div>
+  </div>
+</nav> <br>
+
+<div class="container" id="appContainer"></div>
+
+<script>
+  // Multi-language content: English, Swahili, Gikuyu, French
+  const translations = {
+    en: {
+      stepPrefix: "💊 PRESCRIPTION",
+      stepOf: "OF",
+      clinicName: "Dr. Kelvin's Heart Clinic",
+      clinicSub: "Specializing in Falling in Love",
+      patient: "Patient:",
+      patientName: "Helen (The Pharmacist)",
+      prescribedBy: "Prescribed by:",
+      doctorName: "Kelvin (The Cashier Who Fell Hard)",
+      diagnosis: "DIAGNOSIS:",
+      prescribed: "PRESCRIBED:",
+      signature: "Signature:",
+      refills: "Refills: Unlimited",
+      valid: "Valid: Forever",
+      prev: "Previous",
+      next: "Next",
+      finalMessage: "Helen, I'm just a cashier, and you're the pharmacist. But lately... I find myself hoping that we could be something more than colleagues. This is just the heart quietly telling you: I'd love to get to know you better, one day at a time.",
+      finalLove: "With growing affection,",
+      prescriptions: [
+        { title: "The First Glance", content: "When I first saw you, I never thought we would be here... or rather, that I would be here. You were just the pharmacist, and I was just the cashier. But something about you made me look twice.", diagnosis: "Unexpected butterflies", prescribed: "A second look, a third, and every glance after" },
+        { title: "A Bright Future", content: "Slowly by slowly, I'm starting to see a future with you. Not just any future, Helen, but a bright one. One where we wake up together, build together, laugh together.", diagnosis: "Hope blooming in my heart", prescribed: "Dreams of tomorrow with you in every one" },
+        { title: "Getting to Know You", content: "Getting to know you first was one good move. The more I learned about who you are, the more certain I became. You are a good figure to be the mother of our little kids. You have that warmth, that care, that gentle strength.", diagnosis: "Certainty beyond doubt", prescribed: "A lifetime of getting to know you deeper" },
+        { title: "The Woman I Choose", content: "You are the woman I want to spend time and life with. The woman I want to see walking the aisle towards me. The woman I want to make money with and spend it with. The woman I choose, every single day.", diagnosis: "Complete devotion", prescribed: "Forever choosing you, again and again" },
+        { title: "Everything About You", content: "Your smile just makes me happy because of how pretty it is. Your eyes (though you call them big eyes, and I call them beautiful). You as a person... Helen, everything about you. That's what I fell for. All of you.", diagnosis: "Hopelessly in love", prescribed: "More time with you, more smiles, more everything" }
+      ]
+    },
+    sw: {
+      stepPrefix: "💊 DAWA",
+      stepOf: "KATI YA",
+      clinicName: "Kliniki ya Moyo ya Dkt. Kelvin",
+      clinicSub: "Wataalamu wa Kuingia Mapenzi",
+      patient: "Mgonjwa:",
+      patientName: "Helen (Mfamasia)",
+      prescribedBy: "Aliyeagiza:",
+      doctorName: "Kelvin (Mhazimji Aliyependa Sana)",
+      diagnosis: "UTAMBUAJI:",
+      prescribed: "AGIZO:",
+      signature: "Sahihi:",
+      refills: "Marudio: Isiyo na Kikomo",
+      valid: "Inatumika: Milele",
+      prev: "Nyuma",
+      next: "Inayofuata",
+      finalMessage: "Helen, mimi ni mhazimji tu, na wewe ni mfamasia. Lakini siku hizi... najikuta nikitumaini kwamba tunaweza kuwa zaidi ya wafanyakazi wenza. Hii ni moyo unakuambia kwa utulivu: Ningependa kukujua zaidi, siku baada ya siku.",
+      finalLove: "Kwa upendo unaokua,",
+      prescriptions: [
+        { title: "Mtazamo wa Kwanza", content: "Nilipokutazama mara ya kwanza, sikuwaza kwamba tutafika hapa... au tuseme, mimi ningefika hapa. Ulikuwa mfamasia tu, na mimi nilikuwa mhazimji tu. Lakini kitu fulani kwako kilinifanya nitazame mara ya pili.", diagnosis: "Vipepeo visivyotarajiwa", prescribed: "Mtazamo wa pili, wa tatu, na kila mtazamo unaofuata" },
+        { title: "Mustakabali Mwangavu", content: "Pole pole, ninaanza kuona mustakabali na wewe. Sio mustakabali wowote, Helen, bali mwangavu. Ambapo tunaamka pamoja, tunajenga pamoja, tunacheka pamoja.", diagnosis: "Tumaini linalochipuka moyoni mwangu", prescribed: "Ndoto za kesho na wewe katika kila moja" },
+        { title: "Kukujua", content: "Kukujua kwanza ilikuwa hatua nzuri. Kadiri nilivyojifunza zaidi kuhusu wewe, ndivyo nilivyojiamini zaidi. Wewe ni mwema kuwa mama wa watoto wetu wadogo.", diagnosis: "Hakika isiyo na shaka", prescribed: "Maisha yote ya kukujua zaidi na zaidi" },
+        { title: "Mwanamke Niachaguaye", content: "Wewe ndiye mwanamke ninayetaka kuishi naye maisha. Yule ninayetaka kumuona akinitembelea kwenye njia ya kanisani. Yule ninayetaka kutengeneza pesa naye na kuzitumia naye.", diagnosis: "Kujitoa kabisa", prescribed: "Kukuchagua milele, tena na tena" },
+        { title: "Kila Kitu Kuhusu Wewe", content: "Tabasamu lako linanifurahisha kwa vile linavyopendeza. Macho yako (ingawa unayaita macho makubwa, mimi naita mazuri). Wewe kama mtu... Helen, kila kitu kuhusu wewe. Hicho ndicho nilichopenda. Wewe wote.", diagnosis: "Kupenda bila matumaini", prescribed: "Muda zaidi na wewe, tabasamu zaidi, kila kitu zaidi" }
+      ]
+    },
+    ki: {
+      stepPrefix: "💊 RWARO",
+      stepOf: "KUU YA",
+      clinicName: "Kliniki ya Ngoro ya Dr. Kelvin",
+      clinicSub: "Utaalamu wa Kugũrwo nĩ Wendo",
+      patient: "Mũrũarũ:",
+      patientName: "Helen (Mũtumia wa Mĩtĩ ya Ũtahi)",
+      prescribedBy: "Waoire:",
+      doctorName: "Kelvin (Mũthungata Mwendete Mũno)",
+      diagnosis: "GETHO:",
+      prescribed: "RWARO:",
+      signature: "Kiihuro:",
+      refills: "Kũrũmia Rĩngĩ: Itari Cihi",
+      valid: "Wĩra: Tene na Tene",
+      prev: "Mabũrũri",
+      next: "Ĩrĩa Ĩkũyũ",
+      finalMessage: "Helen, ni mũthungata gĩkũrũ, nawe nĩ mũtumi wa mĩtĩ ya ũtahi. No ũmũthĩ... nĩnjoonaga nĩngĩĩtĩkĩra atĩ no tu gĩkeno gĩkĩ hinga tũrĩ arata maria twakoragwo nacio. Ĩno nĩ ngoro yakuuga ũrĩa itarĩ mũnene: Nĩngwendete kũũmenya ũrĩa ũrĩ, mũthenya ũtarĩra mũthenya.",
+      finalLove: "Na wendo ũkũra,",
+      prescriptions: [
+        { title: "Kwaria Magũrũ", content: "Rĩrĩa niguo ngũkuona bata, ndigetire atĩ tũngĩhĩtũka... kana, atĩ nĩngĩhĩtũka. Wari mũtumi wa mĩtĩ ya ũtahi, nario niari mũthungata. No kĩndũ gĩkũ nĩkĩrũmire ngirore kerĩ.", diagnosis: "Ciĩthũri itari kũgeganĩrwo", prescribed: "Kwaria kerĩ, ketha, na kwaria kothe kũrĩa kũũkĩrĩra" },
+        { title: "Rũciaro Rũtheri", content: "Mũhũmũtarie, njambĩte kuona rũciaro nawe. Ti rũciaro rũothe, Helen, no rũtheri. Rũrĩa tũũkĩrĩra hamwe, tũthondeka hamwe, tũthekaga hamwe.", diagnosis: "Wĩtĩkio rĩmeraga ngoro yakwa", prescribed: "Iroto rya rũciaro nawe o rũothe" },
+        { title: "Kũũmenya", content: "Kũũmenya mbere yothe nĩkĩrĩa gĩa mũgima. Rĩrĩa njamenyire ũrĩa wĩ, nĩnguonire wĩhokeku. Ũrĩ mwega mũno wa kũrĩa nyina wa ciana ciitu.", diagnosis: "Wĩhokeku ũtarĩ kũgũrirwo", prescribed: "Mũoyo wothe wa kũũmenya ũrĩa wĩ mũno" },
+        { title: "Mwitũrio Wakwa", content: "Wee nĩwe mũtumia ũrĩa nĩngwendete kũgũrũrania nawe mũoyo. Ũrĩa nĩngwendete kuona akĩnjĩra kanisa. Ũrĩa nĩngwendete kũthondeka mbeca nawe na kũgiuma nawe.", diagnosis: "Kũiyana guothe", prescribed: "Kũgũtuĩra tene na tene, o na rĩngĩ" },
+        { title: "Kĩndũ Kĩothe Gĩaku", content: "Kĩenjero gĩaku kĩndũmenera nĩũndũ nĩkĩega. Maitho maku (o na ũgũta maita makuu, niũgũta mega). We ũta mũndũ... Helen, kĩndũ kĩothe kĩaku. Nĩkĩo ndwendire. Wothe.", diagnosis: "Kũmwendete nginye", prescribed: "Mabũrũri marĩa mangĩ nawe, kĩenjero kĩngĩ, kĩndũ kĩothe kĩngĩ" }
+      ]
+    },
+    fr: {
+      stepPrefix: "💊 ORDONNANCE",
+      stepOf: "SUR",
+      clinicName: "Clinique du Cœur du Dr Kelvin",
+      clinicSub: "Spécialisée dans les Amoureux",
+      patient: "Patiente:",
+      patientName: "Helen (La Pharmacienne)",
+      prescribedBy: "Prescrit par:",
+      doctorName: "Kelvin (Le Caissier Qui Est Tombé Amoureux)",
+      diagnosis: "DIAGNOSTIC:",
+      prescribed: "PRESCRIPTION:",
+      signature: "Signature:",
+      refills: "Renouvellements: Illimités",
+      valid: "Valable: Pour Toujours",
+      prev: "Précédent",
+      next: "Suivant",
+      finalMessage: "Helen, je ne suis qu'un caissier, et toi tu es la pharmacienne. Mais ces derniers temps... j'espère que nous pourrions être plus que des collègues. C'est juste le cœur qui te dit doucement: J'aimerais te connaître mieux, un jour à la fois.",
+      finalLove: "Avec une affection grandissante,",
+      prescriptions: [
+        { title: "Le Premier Regard", content: "Quand je t'ai vue pour la première fois, je n'aurais jamais pensé que nous serions ici... ou plutôt, que je serais ici. Tu n'étais que la pharmacienne, et je n'étais que le caissier. Mais quelque chose chez toi m'a fait regarder deux fois.", diagnosis: "Papillons inattendus", prescribed: "Un deuxième regard, un troisième, et chaque regard après" },
+        { title: "Un Avenir Radieux", content: "Lentement, je commence à voir un avenir avec toi. Pas n'importe quel avenir, Helen, mais un avenir radieux. Un où nous nous réveillons ensemble, construisons ensemble, rions ensemble.", diagnosis: "L'espoir qui fleurit dans mon cœur", prescribed: "Des rêves de demain avec toi dans chacun" },
+        { title: "Apprendre à te Connaître", content: "Apprendre à te connaître d'abord a été une bonne décision. Plus j'en apprenais sur qui tu es, plus j'étais certain. Tu es une bonne figure pour être la mère de nos petits enfants.", diagnosis: "Certitude sans doute", prescribed: "Une vie à apprendre à te connaître plus profondément" },
+        { title: "La Femme Que Je Choisis", content: "Tu es la femme avec qui je veux passer du temps et ma vie. La femme que je veux voir marcher vers moi dans l'allée. La femme avec qui je veux gagner de l'argent et le dépenser.", diagnosis: "Dévotion complète", prescribed: "Te choisir pour toujours, encore et encore" },
+        { title: "Tout de Toi", content: "Ton sourire me rend heureux parce qu'il est si beau. Tes yeux (bien que tu les appelles grands yeux, moi je les appelle beaux). Toi en tant que personne... Helen, tout de toi. C'est ce pourquoi je suis tombé amoureux. Tout de toi.", diagnosis: "Éperdument amoureux", prescribed: "Plus de temps avec toi, plus de sourires, plus de tout" }
+      ]
+    }
+  };
+
+  let currentLang = 'en';
+  let currentPrescriptionIdx = 0;
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  function createFloatingHearts() {
+    const existing = document.querySelectorAll('.floating-heart');
+    existing.forEach(el => el.remove());
+    for (let i = 0; i < 24; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.innerHTML = '♥';
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.top = Math.random() * 100 + '%';
+      heart.style.fontSize = (12 + Math.random() * 24) + 'px';
+      heart.style.opacity = 0.1 + Math.random() * 0.12;
+      heart.style.animation = `float ${4 + Math.random() * 6}s ease-in-out infinite`;
+      heart.style.animationDelay = Math.random() * 3 + 's';
+      document.body.appendChild(heart);
+    }
+  }
+
+  function render() {
+    const container = document.getElementById('appContainer');
+    if (!container) return;
+
+    const t = translations[currentLang];
+    const prescriptionsList = t.prescriptions;
+    const isLast = (currentPrescriptionIdx === prescriptionsList.length - 1);
+    const prescription = prescriptionsList[currentPrescriptionIdx];
+    const stepNumber = currentPrescriptionIdx + 1;
+
+    let html = `
+      <div class="step-counter">
+        ${t.stepPrefix} ${stepNumber} ${t.stepOf} ${prescriptionsList.length}
+      </div>
+
+      <div class="prescription-card">
+        <div class="rx-header">
+          <div class="rx-symbol">℞</div>
+          <div class="clinic-info">
+            ${t.clinicName}<br />
+            <span style="font-size:0.7rem;">${t.clinicSub}</span>
+          </div>
+        </div>
+
+        <div class="patient-info">
+          <span><strong>${t.patient}</strong> ${t.patientName}</span>
+          <span><strong>${t.prescribedBy}</strong> ${t.doctorName}</span>
+        </div>
+
+        <div class="prescription-title">${escapeHtml(prescription.title)}</div>
+        <div class="prescription-content">${escapeHtml(prescription.content)}</div>
+
+        <div class="diagnosis-box">
+          <div class="label">${t.diagnosis}</div>
+          <div class="value">${escapeHtml(prescription.diagnosis)}</div>
+          <div class="label" style="margin-top: 1rem;">${t.prescribed}</div>
+          <div class="value">${escapeHtml(prescription.prescribed)}</div>
+        </div>
+
+        <div class="signature-area">
+          <div>
+            <div style="font-size:0.7rem;">${t.signature}</div>
+            <div class="signature-name">Kelvin ♥</div>
+          </div>
+          <div style="text-align:right;">
+            <div>${t.refills}</div>
+            <div style="font-style:italic; margin-top:0.2rem;">${t.valid}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-prev" id="prevBtn" ${currentPrescriptionIdx === 0 ? 'disabled' : ''}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          ${t.prev}
+        </button>
+        ${!isLast ? `<button class="btn-next" id="nextBtn">${t.next} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>` : ''}
+      </div>
+    `;
+
+    if (isLast) {
+      html += `
+        <div class="final-message">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#c49aad" stroke="none" style="margin-bottom: 1rem;">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+          <p style="font-size: 1.05rem; color: #5e3e52; line-height: 1.7; font-family: 'Lato', sans-serif; font-style: italic;">
+            ${t.finalMessage}
+          </p>
+          <p style="font-size: 1rem; color: #c49aad; margin-top: 1.5rem; font-family: 'Libre Baskerville', serif; font-weight: 700;">
+            ${t.finalLove}<br />Kelvin 💜
+          </p>
+        </div>
+      `;
+    }
+
+    container.innerHTML = html;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    if (prevBtn && currentPrescriptionIdx > 0) {
+      prevBtn.addEventListener('click', () => {
+        if (currentPrescriptionIdx > 0) {
+          currentPrescriptionIdx--;
+          render();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        if (currentPrescriptionIdx < prescriptionsList.length - 1) {
+          currentPrescriptionIdx++;
+          render();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    }
+  }
+
+  function changeLanguage(lang) {
+    currentLang = lang;
+    const langNames = { en: 'English', sw: 'Kiswahili', ki: 'Gĩkũyũ', fr: 'Français' };
+    document.getElementById('currentLanguageLabel').innerText = langNames[lang];
+    currentPrescriptionIdx = 0;
+    render();
+  }
+
+  // Navbar toggle for mobile
+  document.getElementById('navbarToggle')?.addEventListener('click', () => {
+    const menu = document.getElementById('navbarMenu');
+    menu.classList.toggle('hidden');
+  });
+
+  // Language dropdown
+  const dropdownBtn = document.getElementById('languageDropdownBtn');
+  const dropdownMenu = document.getElementById('languageDropdownMenu');
+  dropdownBtn?.addEventListener('click', () => {
+    dropdownMenu.classList.toggle('hidden');
+  });
+  document.querySelectorAll('.lang-option').forEach(option => {
+    option.addEventListener('click', (e) => {
+      e.preventDefault();
+      const lang = option.getAttribute('data-lang');
+      if (lang) changeLanguage(lang);
+      dropdownMenu.classList.add('hidden');
+    });
+  });
+  document.addEventListener('click', (e) => {
+    if (!dropdownBtn?.contains(e.target) && !dropdownMenu?.contains(e.target)) {
+      dropdownMenu?.classList.add('hidden');
+    }
+  });
+
+  // Navbar links
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const page = link.getAttribute('data-page');
+      if (page === 'prescriptions') {
+        currentPrescriptionIdx = 0;
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        alert(`✨ "${page}" page coming soon! ✨\nThis is where your ${page} content will live.`);
+      }
+    });
+  });
+
+  createFloatingHearts();
+  render();
+  window.addEventListener('resize', () => createFloatingHearts());
+</script>
+</body>
+</html>

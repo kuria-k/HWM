@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Ancient Love Letters · Kelvin to Helen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Playfair Display', 'Libre Baskerville', serif;
+      background: linear-gradient(135deg, #FDF8F5 0%, #F9F0F5 50%, #F0EAF6 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-top: 80px;
+      padding-bottom: 2rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes envelopeOpen {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      30% {
+        transform: scale(0.95);
+      }
+      70% {
+        transform: scale(1.02);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 0;
+        display: none;
+      }
+    }
+
+    @keyframes letterReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(50px) rotateX(-15deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+      }
+    }
+
+    @keyframes waxSealGlow {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(196, 154, 173, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 0 15px rgba(196, 154, 173, 0);
+      }
+    }
+
+    .floating-heart {
+      position: fixed;
+      pointer-events: none;
+      color: rgba(201, 160, 181, 0.15);
+      font-size: 20px;
+      user-select: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      padding: 0 1rem;
+    }
+
+    /* Envelope Container */
+    .envelope-container {
+      background: transparent;
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .envelope {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      background: #e8d5b5;
+      background-image: linear-gradient(45deg, #dcc89c 0%, #f0e0b5 50%, #e0cc9c 100%);
+      border-radius: 8px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .envelope:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .envelope-front {
+      position: relative;
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background: #e0cc9c;
+      background-image: linear-gradient(135deg, #dcc89c 0%, #f0e0b5 50%, #e0cc9c 100%);
+      clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+      border-radius: 8px 8px 0 0;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .wax-seal {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle at 30% 30%, #c44b3c, #8b2a1f);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      animation: waxSealGlow 2s infinite;
+      z-index: 10;
+    }
+
+    .wax-seal svg {
+      width: 35px;
+      height: 35px;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+    }
+
+    .envelope-text {
+      color: #5e3e3e;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-top: 1rem;
+      letter-spacing: 2px;
+    }
+
+    .envelope-subtext {
+      color: #7a5f5f;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    .vintage-flourish {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #d4b58c;
+      letter-spacing: 8px;
+      margin: 1rem 0;
+    }
+
+    /* Letter Container */
+    .letter-container {
+      display: none;
+      animation: letterReveal 0.8s ease-out forwards;
+    }
+
+    .letter-card {
+      background: #fef9e8;
+      background-image: linear-gradient(to bottom, #fef9e8 0%, #fff4e0 100%);
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      border: 1px solid #e8d5b5;
+      position: relative;
+    }
+
+    .letter-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 2px, transparent 2px, transparent 8px);
+      pointer-events: none;
+      border-radius: 8px;
+    }
+
+    .letter-border {
+      border: 1px solid #d4b58c;
+      padding: 1.5rem;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .letter-date {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem;
+      color: #a0785c;
+      letter-spacing: 3px;
+      margin-bottom: 2rem;
+      font-style: italic;
+      border-bottom: 1px solid #e0cc9c;
+      display: inline-block;
+      width: auto;
+      padding-bottom: 0.5rem;
+    }
+
+    .letter-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2rem);
+      color: #5e3e3e;
+      margin: 1.5rem 0 1rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .letter-content {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      line-height: 1.9;
+      color: #4a3a3a;
+      text-align: justify;
+      margin: 1.5rem 0;
+    }
+
+    .letter-signature {
+      margin-top: 2rem;
+      text-align: right;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: #8b5e3c;
+      border-top: 1px solid #e0cc9c;
+      padding-top: 1.5rem;
+    }
+
+    .letter-signature-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #c49aad;
+      margin-top: 0.3rem;
+    }
+
+    .back-to-envelope {
+      background: transparent;
+      border: 1px solid #d4b58c;
+      color: #7a5f5f;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      padding: 0.6rem 1.5rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .back-to-envelope:hover {
+      background: rgba(196, 154, 173, 0.2);
+      border-color: #c49aad;
+    }
+
+    /* Day indicator badge */
+    .day-badge {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.75rem;
+      color: #c49aad;
+      font-weight: 600;
+      letter-spacing: 2px;
+      background: rgba(196, 154, 173, 0.1);
+      display: inline-block;
+      width: auto;
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      backdrop-filter: blur(4px);
+    }
+
+    @media (max-width: 600px) {
+      .letter-card {
+        padding: 1rem;
+      }
+      .letter-border {
+        padding: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="bg-white/95 backdrop-blur-sm fixed w-full z-20 top-0 start-0 border-b border-gray-200 shadow-sm">
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <a href="home.html" class="flex items-center space-x-3 rtl:space-x-reverse">
+      <svg class="h-8 w-8 text-[#c49aad]" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+      <span class="self-center text-xl font-semibold whitespace-nowrap text-[#5e3e52]">Kelvin's Heart</span>
+    </a>
+    <div class="flex items-center md:order-2 space-x-1 md:space-x-0 rtl:space-x-reverse">
+      <button id="languageDropdownBtn" type="button" class="flex items-center text-[#5e3e52] bg-transparent border border-[#c49aad]/30 hover:bg-[#f9f0f5] focus:ring-4 focus:ring-[#c49aad]/20 font-medium rounded-lg text-sm px-3 py-2 focus:outline-none transition-all">
+        <svg class="h-4 w-4 me-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15 15 0 0 0 0 20 15 15 0 0 0 0-20z"/>
+        </svg>
+        <span id="currentLanguageLabel">English</span>
+      </button>
+      <div class="z-50 hidden bg-white border border-gray-200 rounded-lg shadow-lg w-44" id="languageDropdownMenu">
+        <ul class="p-2 text-sm text-gray-700 font-medium" role="none">
+          <li><a href="#" data-lang="en" class="lang-option inline-flex items-center w-full p-2 hover:bg-[#f9f0f5] hover:text-[#c49aad] rounded">🇬🇧 English</a></li>
+          <li><a href="#" data-lang="sw" class="lang-option inline-flex items-center w-full p-2 hover:bg-[#f9f0f5] hover:text-[#c49aad] rounded">🇹🇿 Kiswahili</a></li>
+          <li><a href="#" data-lang="ki" class="lang-option inline-flex items-center w-full p-2 hover:bg-[#f9f0f5] hover:text-[#c49aad] rounded">🌾 Gĩkũyũ</a></li>
+          <li><a href="#" data-lang="fr" class="lang-option inline-flex items-center w-full p-2 hover:bg-[#f9f0f5] hover:text-[#c49aad] rounded">🇫🇷 Français</a></li>
+        </ul>
+      </div>
+      <button id="navbarToggle" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h14"/></svg>
+      </button>
+    </div>
+    <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbarMenu">
+      <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-transparent">
+        <li><a href="home.html" class="nav-link block py-2 px-3 rounded md:p-0 text-gray-900 hover:text-[#c49aad] transition-colors" data-page="home">Home</a></li>
+        <li><a href="index.html" class="nav-link block py-2 px-3 rounded md:p-0 text-gray-900 hover:text-[#c49aad] transition-colors" data-page="prescriptions">Prescriptions</a></li>
+        <li><a href="letters.html" class="nav-link block py-2 px-3 rounded md:p-0 text-[#c49aad] font-semibold transition-colors" data-page="letters">Letters</a></li>
+        <li><a href="quotes.html" class="nav-link block py-2 px-3 rounded md:p-0 text-gray-900 hover:text-[#c49aad] transition-colors" data-page="songs">Songs</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <!-- Envelope Section -->
+  <div id="envelopeSection" class="envelope-container">
+    <div class="envelope" id="envelope">
+      <div class="envelope-flap"></div>
+      <div class="envelope-front">
+        <div class="wax-seal">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="30" height="30">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </div>
+        <div class="envelope-text">✧ A Letter for You ✧</div>
+        <div class="envelope-subtext">Click to open</div>
+        <div class="vintage-flourish">✧ ❀ ✧</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Letter Section (hidden initially) -->
+  <div id="letterSection" class="letter-container" style="display: none;">
+    <div style="text-align: left;">
+      <button id="backToEnvelopeBtn" class="back-to-envelope">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Envelope
+      </button>
+    </div>
+    <div style="text-align: center;">
+      <span class="day-badge" id="dayBadge"></span>
+    </div>
+    <div class="letter-card" id="letterCard">
+      <div class="letter-border">
+        <div style="text-align: center;">
+          <span class="letter-date" id="letterDate"></span>
+        </div>
+        <h2 class="letter-title" id="letterTitle"></h2>
+        <div class="letter-content" id="letterContent"></div>
+        <div class="letter-signature">
+          Yours forever and always,<br />
+          <div class="letter-signature-name">Kelvin ✧</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Ancient love letters - One for each day of the week (automated, no selection)
+  const loveLetters = {
+    0: { // Sunday
+      title: "To My Dearest Helen, on the Lord's Day",
+      content: `My Beloved Helen,
+
+As the church bells ring out across the quiet morning, I find myself unable to keep my thoughts from wandering to you. This Sabbath day feels incomplete without the warmth of your presence beside me.
+
+I remember the first Sunday I saw you how the morning light caught your hair like spun gold, and how my heart stuttered in my chest like a boy seeing beauty for the very first time. You were not merely a woman; you were a vision sent by the heavens above.
+
+There is a gentle peace about Sundays that reminds me of you. The stillness of the world, the soft hymns floating through open windows it all speaks of the love I carry for you in the deepest chambers of my heart. If I could, I would spend every Sunday morning watching you sleep, tracing the contours of your face with my eyes, thanking whatever stars aligned that brought you into my life.
+
+May this Sunday bring you the same peace you bring to my restless soul.`
+    },
+    1: { // Monday
+      title: "The Beginning of the Week's Longing",
+      content: `My Dearest Helen,
+
+Monday arrives with its hurried pace and endless demands, but unlike most people, I don't dread it. Because Monday is the day I finally get to report to work and see you again after the long weekend of being apart. And from the moment you walk in, I can't take my eyes off you.
+
+Even as the world rushes past and work pulls at me from every direction, I find myself stealing glances at you across the room. Many are the times I've wished I could just take you away from work entirely just the two of us, somewhere far from here, surrounded only by nature. No clocks, no deadlines, no one else's demands. Just us.
+
+I imagine us walking through quiet forests, lying under open skies, talking for hours about everything and nothing. Laughing until our stomachs hurt. Watching you smile in the sunlight with no one needing either of us for anything else. And in the stillness of those dreams, I see a future one where we get to make babies together, build a life rooted in the peace we only find in each other.
+
+You are my sanctuary in the chaos, my quiet harbor in the storm. And every Monday morning, when my eyes find yours across the room, I'm reminded that each passing moment brings me closer to forever with you.
+
+Do you know, my love, that you've turned the hardest day of the week into the day I miss you most fiercely—and the day I'm most grateful to be alive?`
+
+    },
+    2: { // Tuesday
+      title: "A Fire That Never Wanes",
+      content: `My Beloved Helen,
+
+Tuesday finds me writing by candlelight, though the hour is late and my hand grows weary. Yet I cannot rest until I have poured my heart onto this parchment for you.
+
+There is a fire within me that only grows hotter with each passing day—a fire that bears your name. I have tried, in vain, to understand how one woman can command such power over a man's heart. Your laugh echoes in my ears long after we part. Your voice, like honey and warm milk, soothes my restless soul.
+
+I find myself noticing the smallest details about you. The way your fingers dance across the pages of a book. The way you bite your lip when deep in thought. The way you look at me sometimes—as if you are seeing something worthy, something precious.
+
+Let me be bold, my love: I do not simply love you. I cherish you. I adore you. I would cross oceans, climb mountains, and brave the darkest nights just to hold your hand for a single moment.`
+    },
+    3: { // Wednesday - TODAY'S LETTER (if today is Wednesday)
+      title: "The Heart's Midweek Confession",
+      content: `To My Dearest Helen, My Heart's Greatest Treasure,
+
+This Wednesday finds me seated by the window, watching the rain trace delicate patterns upon the glass. The world outside is grey and melancholy, yet within my heart, there is nothing but sunshine, for I have been thinking of you.
+
+Do you know what I realized today, my love? That before you, I was merely existing. I woke, I worked, I slept. But you you have taught me what it means to truly live. You have colored my world in shades I never knew existed.
+
+I remember the exact moment I knew my heart was lost to you. It was not some grand gesture or dramatic declaration. It was ordinary, and yet extraordinary. You laughed a real, full laugh at something silly I had said. And in that laugh, I heard my future. I saw my children's eyes. I felt the shape of the rest of my life.
+
+How does one convey such depth of feeling through mere words? I cannot. I can only tell you that when I am with you, the world makes sense. When I am without you, even the brightest days seem dim.
+
+I love you, Helen. Not as the poets love with flowery words and empty promises. But as a man loves with his whole being, with every breath, with every beat of his foolish, devoted heart.`
+    },
+    4: { // Thursday
+      title: "On the Eve of Another Tomorrow",
+      content: `My Dearest Helen,
+
+Thursday has arrived, and with it, a realization that has settled deep within my bones: no amount of time with you will ever be enough. A hundred lifetimes would pass like whispers in the wind, and still, I would crave more.
+
+I find myself imagining our future together. A small cottage with a garden where flowers bloom in riotous colors. Mornings spent in comfortable silence, reading side by side. Evenings filled with laughter and the stories we will tell our grandchildren.
+
+I want to grow old with you, my love. I want to watch the years trace gentle lines upon your face and know that each one was earned in happiness. I want to hold your hand when we are grey and weary and still feel the same thrill I felt the first time.
+
+There is a word I have been too afraid to speak, though it burns on my tongue each time I see you. But I will write it here, in ink, so that it becomes real: forever. I want forever with you.`
+    },
+    5: { // Friday
+      title: "The Joy That Awaits",
+      content: `My Beloved Helen,
+
+Friday! The week's labors draw to a close, and my heart sings with the knowledge that soon—very soon—I shall see you again. The anticipation is almost too much to bear, like a sweet torture that I would suffer a thousand times over.
+
+I have been counting the hours, my love. Not because I wish time away, but because each moment brings me closer to the sound of your voice, the warmth of your smile, the comfort of your presence.
+
+What shall we do when we are together? I care not, as long as I am by your side. We could watch the stars emerge one by one. We could walk through the park until our feet grow weary. We could simply sit in silence, and it would be the most beautiful conversation I have ever had.
+
+You have become my Friday, Helen. My bright spot. My reward after every long week. You are the reason I smile when I wake and dream when I sleep.`
+    },
+    6: { // Saturday
+      title: "A Love Letter for the Quiet Hours",
+      content: `My Dearest Helen,
+
+Saturday has come at last, and the world feels softer, slower. These are the hours I treasure most—the quiet moments when I can reflect on the gift that you are.
+
+Do you ever wonder, my love, how two souls find each other in this vast, chaotic world? I believe it is not chance, but destiny. A thread woven through the fabric of time, pulling us together against all odds.
+
+I used to be a skeptic—a man who believed in logic and reason. Then you came, and you showed me that the most important things in life cannot be explained. They can only be felt. Deeply. Truly. Completely.
+
+I love you, Helen. I love the woman you are today, and I love the woman you are becoming. I love your strengths and your vulnerabilities. I love your laughter and your tears. I love every version of you that has ever existed and ever will.
+
+If I were to die tomorrow, I would die happy—for I have known your love. But I hope instead to live a long, full life, so that I may spend every remaining moment showing you just how much you mean to me.`
+    }
+  };
+
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  // Get current day from system (0 = Sunday, 1 = Monday, etc.)
+  const todayIndex = new Date().getDay();
+  const todayLetter = loveLetters[todayIndex];
+  const todayName = dayNames[todayIndex];
+
+  function formatDate() {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date().toLocaleDateString('en-US', options);
+  }
+
+  function showTodayLetter() {
+    document.getElementById('dayBadge').innerHTML = `✧ Today's Letter · ${todayName} ✧`;
+    document.getElementById('letterDate').innerHTML = `✧ ${todayName}, ${formatDate()} ✧`;
+    document.getElementById('letterTitle').innerHTML = todayLetter.title;
+    document.getElementById('letterContent').innerHTML = todayLetter.content;
+  }
+
+  function openEnvelope() {
+    const envelopeSection = document.getElementById('envelopeSection');
+    const letterSection = document.getElementById('letterSection');
+    
+    const envelope = document.getElementById('envelope');
+    envelope.style.animation = 'envelopeOpen 0.5s ease-out forwards';
+    
+    setTimeout(() => {
+      envelopeSection.style.display = 'none';
+      letterSection.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 450);
+  }
+
+  function closeLetter() {
+    const envelopeSection = document.getElementById('envelopeSection');
+    const letterSection = document.getElementById('letterSection');
+    
+    letterSection.style.display = 'none';
+    envelopeSection.style.display = 'flex';
+    
+    const envelope = document.getElementById('envelope');
+    envelope.style.animation = 'none';
+    setTimeout(() => {
+      envelope.style.animation = '';
+    }, 10);
+  }
+
+  // Floating hearts
+  function createFloatingHearts() {
+    const existing = document.querySelectorAll('.floating-heart');
+    existing.forEach(el => el.remove());
+    for (let i = 0; i < 24; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.innerHTML = '♥';
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.top = Math.random() * 100 + '%';
+      heart.style.fontSize = (12 + Math.random() * 24) + 'px';
+      heart.style.opacity = 0.1 + Math.random() * 0.12;
+      heart.style.animation = `float ${4 + Math.random() * 6}s ease-in-out infinite`;
+      heart.style.animationDelay = Math.random() * 3 + 's';
+      document.body.appendChild(heart);
+    }
+  }
+
+  // Event Listeners
+  document.getElementById('envelope').addEventListener('click', openEnvelope);
+  document.getElementById('backToEnvelopeBtn').addEventListener('click', closeLetter);
+
+  // Initialize - show today's letter
+  showTodayLetter();
+  createFloatingHearts();
+  window.addEventListener('resize', () => createFloatingHearts());
+
+  // Language dropdown (same logic as other pages)
+  document.getElementById('navbarToggle')?.addEventListener('click', () => {
+    document.getElementById('navbarMenu')?.classList.toggle('hidden');
+  });
+
+  const dropdownBtn = document.getElementById('languageDropdownBtn');
+  const dropdownMenu = document.getElementById('languageDropdownMenu');
+  if (dropdownBtn) {
+    dropdownBtn.addEventListener('click', () => dropdownMenu.classList.toggle('hidden'));
+  }
+  document.addEventListener('click', (e) => {
+    if (!dropdownBtn?.contains(e.target) && !dropdownMenu?.contains(e.target)) {
+      dropdownMenu?.classList.add('hidden');
+    }
+  });
+
+  // Navbar navigation
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const page = link.getAttribute('data-page');
+      if (page === 'letters') {
+        return;
+      } else if (page === 'home') {
+        window.location.href = 'home.html';
+      } else if (page === 'prescriptions') {
+        window.location.href = 'index.html';
+      } else if (page === 'songs') {
+        alert('🎵 Songs page coming soon! 🎵');
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Home · Kelvin's Heart for Helen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Libre Baskerville', serif;
+      background: linear-gradient(135deg, #FDF8F5 0%, #F9F0F5 50%, #F0EAF6 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatHeart {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-10px) scale(1.05); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+
+    .floating-heart {
+      position: fixed;
+      pointer-events: none;
+      color: rgba(201, 160, 181, 0.15);
+      font-size: 20px;
+      user-select: none;
+      z-index: 0;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      background: linear-gradient(135deg, #FDF8F5 0%, #F9F0F5 50%, #F0EAF6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(253, 248, 245, 0.4) 0%, rgba(249, 240, 245, 0.3) 50%, rgba(240, 234, 246, 0.4) 100%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      padding: 2rem;
+      animation: fadeInUp 1.2s ease-out;
+    }
+
+    .heart-icon {
+      animation: pulse 1.8s ease-in-out infinite;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 8vw, 5rem);
+      font-weight: 700;
+      color: #5e3e52;
+      text-shadow: 0 2px 10px rgba(201, 160, 181, 0.2);
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+      font-family: 'Libre Baskerville', serif;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+      color: #7a5f71;
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .hero-quote {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: #9b7e92;
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+      margin-bottom: 2.5rem;
+    }
+
+    .btn-love {
+      background: linear-gradient(135deg, #d4b5c4 0%, #c49aad 100%);
+      color: white;
+      border: none;
+      border-radius: 60px;
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(196, 154, 173, 0.4);
+      text-decoration: none;
+    }
+
+    .btn-love:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(196, 154, 173, 0.5);
+    }
+
+    .heart-decoration {
+      margin-top: 2.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      font-size: 1.3rem;
+      color: #c49aad;
+      opacity: 0.6;
+    }
+
+    @media (max-width: 768px) {
+      .hero-content {
+        padding: 1.5rem;
+      }
+      .btn-love {
+        padding: 0.8rem 1.8rem;
+        font-size: 1rem;
+      }
+      .heart-decoration {
+        gap: 0.6rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar - matching prescription page style -->
+<nav class="bg-white/95 backdrop-blur-sm fixed w-full z-20 top-0 start-0 border-b border-gray-200 shadow-sm">
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+      <svg class="h-8 w-8 text-[#c49aad]" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+      <span class="self-center text-xl font-semibold whitespace-nowrap text-[#5e3e52]">Kelvin's Heart</span>
+    </a>
+    <div class="flex items-center md:order-2 space-x-1 md:space-x-0 rtl:space-x-reverse">
+      <button id="languageDropdownBtn" type="button" class="flex items-center text-[#5e3e52] bg-transparent border border-[#c49aad]/30 hover:bg-[#f9f0f5] focus:ring-4 focus:ring-[#c49aad]/20 font-medium rounded-lg text-sm px-3 py-2 focus:outline-none transition-all">
+        <svg class="h-4 w-4 me-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15 15 0 0 0 0 20 15 15 0 0 0 0-20z"/>
+        </svg>
+        <span id="currentLanguageLabel">English</span>
+      </button>
+      <div class="z-50 hidden bg-white border border-gray-200 rounded-lg shadow-lg w-44" id="languageDropdownMenu">
+        <ul class="p-2 text-sm text-gray-700 font-medium" role="none">
+          <li><a href="#" data-lang="en" class="lang-option inline-flex items-center w-full p-2 hover:bg-[#f9f0f5] hover:text-[#c49aad] rounded">🇬🇧 English</a></li>
+          <li><a href="#" data-lang="sw" class="lang-option inline-flex items-center w-full p-2 hover:bg-[#f9f0f5] hover:text-[#c49aad] rounded">🇹🇿 Kiswahili</a></li>
+          <li><a href="#" data-lang="ki" class="lang-option inline-flex items-center w-full p-2 hover:bg-[#f9f0f5] hover:text-[#c49aad] rounded">🌾 Gĩkũyũ</a></li>
+          <li><a href="#" data-lang="fr" class="lang-option inline-flex items-center w-full p-2 hover:bg-[#f9f0f5] hover:text-[#c49aad] rounded">🇫🇷 Français</a></li>
+        </ul>
+      </div>
+      <button id="navbarToggle" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h14"/></svg>
+      </button>
+    </div>
+    <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbarMenu">
+      <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-transparent">
+        <li><a href="home.html" class="nav-link block py-2 px-3 rounded md:p-0 text-[#c49aad] font-semibold transition-colors" data-page="home">Home</a></li>
+        <li><a href="index.html" class="nav-link block py-2 px-3 rounded md:p-0 text-gray-900 hover:text-[#c49aad] transition-colors" data-page="prescriptions">Prescriptions</a></li>
+        <li><a href="letters.html" class="nav-link block py-2 px-3 rounded md:p-0 text-gray-900 hover:text-[#c49aad] transition-colors" data-page="letters">Letters</a></li>
+        <li><a href="quotes.html" class="nav-link block py-2 px-3 rounded md:p-0 text-gray-900 hover:text-[#c49aad] transition-colors" data-page="songs">Songs</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="heart-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="#c49aad" stroke="none">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+    </div>
+    <h1 class="hero-title" id="heroTitle">Helen,</h1>
+    <p class="hero-subtitle" id="heroSubtitle">This little space on the internet was created just for you.</p>
+    <p class="hero-quote" id="heroQuote">"Every heartbeat writes a story, and mine has been writing yours since the day we met."</p>
+    <a href="#" id="exploreBtn" class="btn-love">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 12H4M12 4l8 8-8 8"/>
+      </svg>
+      Explore My Heart
+    </a>
+    <div class="heart-decoration">
+      <span>♥</span> <span>♥</span> <span>♥</span> <span>♥</span> <span>♥</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Floating hearts
+  function createFloatingHearts() {
+    const existing = document.querySelectorAll('.floating-heart');
+    existing.forEach(el => el.remove());
+    for (let i = 0; i < 24; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.innerHTML = '♥';
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.top = Math.random() * 100 + '%';
+      heart.style.fontSize = (12 + Math.random() * 24) + 'px';
+      heart.style.opacity = 0.1 + Math.random() * 0.12;
+      heart.style.animation = `floatHeart ${4 + Math.random() * 6}s ease-in-out infinite`;
+      heart.style.animationDelay = Math.random() * 3 + 's';
+      document.body.appendChild(heart);
+    }
+  }
+
+  // Multi-language translations
+  const homeTranslations = {
+    en: {
+      title: "Helen,",
+      subtitle: "This little space on the internet was created just for you.",
+      quote: "Every heartbeat writes a story, and mine has been writing yours since the day we met.",
+      exploreBtn: "Explore My Heart"
+    },
+    sw: {
+      title: "Helen,",
+      subtitle: "Sehemu hii ndogo kwenye intaneti imeundwa kwa ajili yako tu.",
+      quote: "Kila mpigo wa moyo huandika hadithi, na yangu imekuwa ikiandika yako tangu siku tulipokutana.",
+      exploreBtn: "Gundua Moyo Wangu"
+    },
+    ki: {
+      title: "Helen,",
+      subtitle: "Gĩthĩ kĩnini gĩkĩ kĩrĩ internet gĩthondeketie wee tu.",
+      quote: "Kĩrĩa gĩothe kĩa ngoro kĩandĩka rũgano, na rwakwa nĩrũkũandĩkaga tũku rĩrĩa twaiganire.",
+      exploreBtn: "Menya Ngoro Yakwa"
+    },
+    fr: {
+      title: "Hélène,",
+      subtitle: "Ce petit espace sur internet a été créé juste pour toi.",
+      quote: "Chaque battement de cœur écrit une histoire, et le mien écrit la tienne depuis le jour où nous nous sommes rencontrés.",
+      exploreBtn: "Explore Mon Cœur"
+    }
+  };
+
+  let currentLang = 'en';
+
+  function updateHomeContent() {
+    const t = homeTranslations[currentLang];
+    document.getElementById('heroTitle').innerText = t.title;
+    document.getElementById('heroSubtitle').innerText = t.subtitle;
+    document.getElementById('heroQuote').innerHTML = `"${t.quote}"`;
+    document.getElementById('exploreBtn').innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 12H4M12 4l8 8-8 8"/>
+      </svg>
+      ${t.exploreBtn}
+    `;
+  }
+
+  function changeLanguage(lang) {
+    currentLang = lang;
+    const langNames = { en: 'English', sw: 'Kiswahili', ki: 'Gĩkũyũ', fr: 'Français' };
+    const labelSpan = document.getElementById('currentLanguageLabel');
+    if (labelSpan) labelSpan.innerText = langNames[lang];
+    updateHomeContent();
+  }
+
+  // Navbar toggle
+  document.getElementById('navbarToggle')?.addEventListener('click', () => {
+    const menu = document.getElementById('navbarMenu');
+    menu.classList.toggle('hidden');
+  });
+
+  // Language dropdown
+  const dropdownBtn = document.getElementById('languageDropdownBtn');
+  const dropdownMenu = document.getElementById('languageDropdownMenu');
+  if (dropdownBtn) {
+    dropdownBtn.addEventListener('click', () => {
+      dropdownMenu.classList.toggle('hidden');
+    });
+  }
+  document.querySelectorAll('.lang-option').forEach(option => {
+    option.addEventListener('click', (e) => {
+      e.preventDefault();
+      const lang = option.getAttribute('data-lang');
+      if (lang) changeLanguage(lang);
+      dropdownMenu.classList.add('hidden');
+    });
+  });
+  document.addEventListener('click', (e) => {
+    if (!dropdownBtn?.contains(e.target) && !dropdownMenu?.contains(e.target)) {
+      dropdownMenu?.classList.add('hidden');
+    }
+  });
+
+  // Navbar links
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const page = link.getAttribute('data-page');
+      if (page === 'home') {
+        return;
+      } else if (page === 'prescriptions') {
+        window.location.href = 'index.html';
+      } else if (page === 'letters') {
+        alert('💌 Letters page coming soon! 💌');
+      } else if (page === 'songs') {
+        alert('🎵 Songs page coming soon! 🎵');
+      }
+    });
+  });
+
+  // Explore button
+  const exploreBtn = document.getElementById('exploreBtn');
+  if (exploreBtn) {
+    exploreBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = 'index.html';
+    });
+  }
+
+  createFloatingHearts();
+  updateHomeContent();
+  window.addEventListener('resize', () => createFloatingHearts());
+</script>
+</body>
+</html>
